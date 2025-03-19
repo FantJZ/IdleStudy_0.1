@@ -37,7 +37,7 @@ struct Fish: Codable {
     let rarity = readFishRarity()
 
     // return
-    return .init(fishName: name, quality: quality, weight: weight, price: price, rarity: rarity)
+    return .init(fishName: name, quality: quality, weight: weight, price: price, rarity: rarity, image: image)
   }
 }
 
@@ -138,6 +138,8 @@ struct FishInfoItem {
   let price: Int
 
   let rarity: String
+    
+  let image : String
 }
 
 // MARK: - 抽奖机
