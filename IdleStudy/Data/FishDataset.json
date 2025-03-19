@@ -1,0 +1,111 @@
+[
+    {
+        "name" : "金鱼",
+        "image" : "square.and.arrow.up",
+        "rarity" : "普通",
+        "pond" : "小池塘",
+        "maximum weight" : 1.50,
+        "minimum weight" : 0.20,
+        "price" : 10
+    },
+    
+    {
+        "name" : "鲫鱼",
+        "image" : "square.and.arrow.down",
+        "rarity" : "普通",
+        "pond" : "小池塘",
+        "maximum weight" : 2.00,
+        "minimum weight" : 0.50,
+        "price" : 15
+    },
+    
+    {
+        "name" : "泥鳅",
+        "image" : "square.and.arrow.down",
+        "rarity" : "普通",
+        "pond" : "小池塘",
+        "maximum weight" : 1.50,
+        "minimum weight" : 0.05,
+        "price" : 10
+    },
+    
+    {
+        "name" : "赖克宝",
+        "image" : "square.and.arrow.down",
+        "rarity" : "稀有",
+        "pond" : "小池塘",
+        "maximum weight" : 1.00,
+        "minimum weight" : 0.50,
+        "price" : 30
+    },
+    
+    {
+        "name" : "白云金丝",
+        "image" : "square.and.arrow.down",
+        "rarity" : "稀有",
+        "pond" : "小池塘",
+        "maximum weight" : 1.50,
+        "minimum weight" : 0.10,
+        "price" : 30
+    },
+    
+    {
+        "name" : "孔雀鱼",
+        "image" : "square.and.arrow.down",
+        "rarity" : "稀有",
+        "pond" : "小池塘",
+        "maximum weight" : 1.50,
+        "minimum weight" : 0.10,
+        "price" : 30
+    },
+    
+    {
+        "name" : "天堂鱼",
+        "image" : "square.and.arrow.down",
+        "rarity" : "史诗",
+        "pond" : "小池塘",
+        "maximum weight" : 1.85,
+        "minimum weight" : 0.20,
+        "price" : 60
+    },
+    
+    {
+        "name" : "锦鲤",
+        "image" : "square.and.arrow.down",
+        "rarity" : "史诗",
+        "pond" : "小池塘",
+        "maximum weight" : 5.00,
+        "minimum weight" : 0.30,
+        "price" : 60
+    },
+    
+    {
+        "name" : "丹顶锦鲤",
+        "image" : "square.and.arrow.down",
+        "rarity" : "传说",
+        "pond" : "小池塘",
+        "maximum weight" : 5.00,
+        "minimum weight" : 0.30,
+        "price" : 150
+    },
+    
+    {
+        "name" : "金龙鱼",
+        "image" : "square.and.arrow.down",
+        "rarity" : "传说",
+        "pond" : "小池塘",
+        "maximum weight" : 7.00,
+        "minimum weight" : 0.50,
+        "price" : 150
+    },
+    
+    {
+        "name" : "你被骗了鱼",
+        "image" : "square.and.arrow.down",
+        "rarity" : "至珍",
+        "pond" : "小池塘",
+        "maximum weight" : 1.00,
+        "minimum weight" : 0.01,
+        "price" : 1
+    },
+]
