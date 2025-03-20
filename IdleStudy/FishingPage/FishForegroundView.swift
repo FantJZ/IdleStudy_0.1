@@ -11,6 +11,7 @@ struct ForegroundView: View {
   @State var startTiming: Bool = false // 是否开始计时
   @State var showListFishes: Bool = false
   @State var showSlideBar: Bool = true
+  @State var showFishBusket: Bool = false
 
   /// 局部变量
   @EnvironmentObject private var presenter: FishPresenter
@@ -21,7 +22,8 @@ struct ForegroundView: View {
         // 顶部栏
         topBarView(
           startTiming: self.$startTiming,
-          showListFishes: self.$showListFishes
+          showListFishes: self.$showListFishes,
+          showFishBusket: self.$showFishBusket
         )
 
         Spacer()
@@ -50,6 +52,11 @@ struct ForegroundView: View {
       // 显示鱼的目录
       if self.showListFishes == true {
         FishListsView(showListFishes: self.$showListFishes)
+      }
+      
+      // 显示鱼篓
+      if self.showFishBusket == true {
+          FishBusketView(showFishBusket: $showFishBusket)
       }
     }
   }

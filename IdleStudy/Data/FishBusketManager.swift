@@ -7,51 +7,6 @@
 
 import Foundation
 
-//extension FishBusketManager {
-//    /// 将字典写入 FishBusket.json
-//    /// - Parameter dictionary: 要存储的字典（值需符合 Codable）
-//    static func writeToFishBusket<T: Codable>(_ dictionary: [String: T]) throws {
-//        try shared.save(dictionary)
-//    }
-//
-//    /// 通用版本（处理包含混合类型的字典）
-//    static func writeToFishBusket(_ dictionary: [String: Any]) throws {
-//        let data = try JSONSerialization.data(
-//            withJSONObject: dictionary,
-//            options: [.prettyPrinted, .sortedKeys]
-//        )
-//        guard let url = shared.fileURL else {
-//            throw FileError.invalidPath
-//        }
-//        try data.write(to: url)
-//    }
-//}
-
-//func saveToBusket() {
-//    guard let fish = FishDataManager.shared.currentFishInfo else {
-//        print("⚠️ 没有可保存的鱼数据")
-//        return
-//    }
-//    
-//    let fishDict: [String: Any] = [ // 移除可选类型声明
-//        "image": fish.image,
-//        "name": fish.fishName,
-//        "quality": fish.quality,
-//        "weight": fish.weight,
-//        "price": fish.price,
-//        "rarity": fish.rarity
-//    ]
-//    
-//    do {
-//        try FishBusketManager.shared.saveDictionary(fishDict) // 直接传递字典
-//        print("✅ 字典存储成功")
-//    } catch FishBusketManager.FileError.encodingFailed {
-//        print("❌ 数据编码失败")
-//    } catch {
-//        print("❌ 其他错误：\(error)")
-//    }
-//}
-
 class FishBusketManager {
     static let shared = FishBusketManager()
     private let fileName = "FishBusket.json"

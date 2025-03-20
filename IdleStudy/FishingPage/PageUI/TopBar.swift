@@ -12,6 +12,7 @@ import SwiftUI
 struct topBarView: View {
   @Binding var startTiming: Bool
   @Binding var showListFishes: Bool
+  @Binding var showFishBusket: Bool
 
   var body: some View {
     VStack {
@@ -21,19 +22,28 @@ struct topBarView: View {
           // ...
         }) {
           Image(systemName: "xmark")
-            .foregroundColor(.white)
+            .foregroundColor(.black)
         }
         .padding(.leading)
         Spacer()
-
+        
         Button(action: {
           self.showListFishes = true
         }) {
           Image(systemName: "book.pages")
-            .foregroundColor(.white)
+            .foregroundColor(.black)
         }
         .padding(.trailing)
+        
+        Button(action: {
+          self.showFishBusket = true
+        }) {
+          Image(systemName: "backpack")
+            .foregroundColor(.black)
+        }
+//        .padding(.trailing)
       }
+      
 
       // 当开始计时后，显示正向 & 倒计时
       if self.startTiming {
@@ -46,4 +56,7 @@ struct topBarView: View {
       }
     }
   }
+}
+#Preview {
+  topBarView(startTiming: .constant(false), showListFishes: .constant(true), showFishBusket: .constant(true))
 }
