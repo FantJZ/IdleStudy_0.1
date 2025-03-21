@@ -42,7 +42,7 @@ struct FishInfoView: View {
           "image": self.info?.image ?? "",
           "name": self.info?.fishName ?? "",
           "quality": self.info?.quality ?? "",
-          "weight": String(format: "%.2f", self.info?.weight ?? 0),
+          "weight": self.info?.weight ?? 0,
           "price": self.info?.price ?? 0,
           "rarity": self.info?.rarity ?? ""
       ]

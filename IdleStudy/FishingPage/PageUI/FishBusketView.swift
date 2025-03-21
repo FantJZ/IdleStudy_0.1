@@ -137,16 +137,11 @@ extension FishBusketView {
         
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                // 从文件加载原始数据
-                let rawData = try FishBusketManager.shared.loadDictionary()
+                // 使用新的方法加载所有鱼数据数组
+                let fishArray = try FishBusketManager.shared.loadFishArray()
                 
                 // 转换数据模型
-                let decodedData = try rawData.compactMap { item -> FishInFishBusket? in
-                    guard let fishDict = item.value as? [String: Any] else {
-                        print("发现无效数据条目: \(item.key)")
-                        return nil
-                    }
-                    
+                let decodedData = try fishArray.compactMap { fishDict -> FishInFishBusket? in
                     let jsonData = try JSONSerialization.data(withJSONObject: fishDict)
                     return try JSONDecoder().decode(FishInFishBusket.self, from: jsonData)
                 }
@@ -185,6 +180,8 @@ extension FishBusketView {
                 self.errorMessage = "数据格式错误"
             case .encodingFailed:
                 self.errorMessage = "数据存储失败"
+            case .migrationFailed:
+                self.errorMessage = "数据迁移失败"
             }
             self.isLoading = false
         }
@@ -333,3 +330,4 @@ struct FishCardView: View {
             FishBusketManager.shared.debugFileStatus()
         }
 }
+
