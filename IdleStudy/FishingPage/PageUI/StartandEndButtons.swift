@@ -40,8 +40,15 @@ struct StartandEndButtons: View {
       // ---- End 按钮 ----
       Button(action: {
         // 停止计时逻辑
-        self.startTiming = false
-        self.showSlideBar = true
+          self.startTiming = false
+          self.showSlideBar = true
+          
+          do {
+              try FishBusketManager.shared.removeAllFishes()
+              print("✅ 已清空文件中的鱼数据")
+          } catch {
+              print("❌ 清空失败: \(error)")
+          }
       }) {
         Text("End")
           .foregroundColor(.white)

@@ -6,9 +6,22 @@ struct FishBusketView: View {
     @State private var errorMessage: String?
     @Binding var showFishBusket: Bool
     
+    // 新增：用于记录当前的排序方式
+    @State private var sortOption: SortOption = .priceDesc
+    
+    // 定义可用的排序方式
+    enum SortOption {
+        case name
+        case rarity
+        case quality
+        case priceAsc
+        case priceDesc
+    }
+    
+    // 2 列布局示例
     private let columns = [
         GridItem(.flexible(minimum: 150), spacing: 16),
-        GridItem(.flexible(minimum: 150), spacing: 16)
+        GridItem(.flexible(minimum: 150), spacing: 16),
     ]
     
     var body: some View {
@@ -21,6 +34,7 @@ struct FishBusketView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true) // 隐藏系统自带的返回按钮
             .toolbar {
+                
                 // 左侧：自定义返回按钮
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -32,10 +46,29 @@ struct FishBusketView: View {
                     }
                 }
                 
-                // 右侧：清空按钮
+                // 右侧：排序菜单
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("清空") {
-                        clearAllFishes()
+                    Menu("排序") {
+                        Button("名称") {
+                            sortOption = .name
+                            applySort()
+                        }
+                        Button("稀有度") {
+                            sortOption = .rarity
+                            applySort()
+                        }
+                        Button("品质") {
+                            sortOption = .quality
+                            applySort()
+                        }
+                        Button("价格升序") {
+                            sortOption = .priceAsc
+                            applySort()
+                        }
+                        Button("价格降序") {
+                            sortOption = .priceDesc
+                            applySort()
+                        }
                     }
                 }
             }
@@ -58,6 +91,30 @@ struct FishBusketView: View {
             }
         }
         .padding(.horizontal, 8)
+    }
+}
+
+// MARK: - 排序逻辑
+extension FishBusketView {
+    /// 根据当前 sortOption，对 fishes 数组进行排序
+    private func applySort() {
+        switch sortOption {
+        case .name:
+            // 按名称升序
+            fishes.sort { $0.name < $1.name }
+        case .rarity:
+            // 按稀有度升序（根据字符串顺序）
+            fishes.sort { $0.rarity < $1.rarity }
+        case .quality:
+            // 按品质升序（根据字符串顺序）
+            fishes.sort { $0.quality < $1.quality }
+        case .priceAsc:
+            // 价格从低到高
+            fishes.sort { $0.price < $1.price }
+        case .priceDesc:
+            // 价格从高到低
+            fishes.sort { $0.price > $1.price }
+        }
     }
 }
 
@@ -129,7 +186,7 @@ extension FishBusketView {
     }
 }
 
-// MARK: - 数据加载 & 清空逻辑
+// MARK: - 数据加载逻辑
 extension FishBusketView {
     private func loadFishData() {
         guard !isLoading else { return }
@@ -139,7 +196,7 @@ extension FishBusketView {
         
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                // 不要用 loadDictionary()，改用 loadFishArray()
+                // 从文件读取所有鱼的字典
                 let fishArray = try FishBusketManager.shared.loadFishArray()
                 
                 // 转换数据模型
@@ -150,8 +207,10 @@ extension FishBusketView {
                 
                 DispatchQueue.main.async {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        // 按照价格排序，也可以换成别的排序逻辑
-                        self.fishes = decodedData.sorted { $0.price > $1.price }
+                        self.fishes = decodedData
+                        // 读取完后先按当前 sortOption 排序
+                        self.applySort()
+                        
                         self.isLoading = false
                     }
                 }
@@ -189,17 +248,6 @@ extension FishBusketView {
             self.isLoading = false
         }
     }
-    
-    /// 清空所有鱼
-    private func clearAllFishes() {
-        do {
-            try FishBusketManager.shared.removeAllFishes()
-            // 清空后刷新UI
-            self.fishes = []
-        } catch {
-            self.errorMessage = "无法清空鱼篓: \(error.localizedDescription)"
-        }
-    }
 }
 
 // MARK: - 鱼卡片组件示例
@@ -223,6 +271,7 @@ struct FishCardView: View {
         }
     }
     
+    // 头部区域（图片和名称）
     private var headerSection: some View {
         VStack(spacing: 10) {
             // 图片显示（支持本地和系统图标）
@@ -259,6 +308,7 @@ struct FishCardView: View {
         }
     }
     
+    // 详细信息区域
     @ViewBuilder
     private var detailsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
