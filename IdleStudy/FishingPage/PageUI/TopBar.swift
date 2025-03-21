@@ -41,7 +41,7 @@ struct topBarView: View {
           Image(systemName: "backpack")
             .foregroundColor(.black)
         }
-//        .padding(.trailing)
+        .padding(.trailing)
       }
       
 

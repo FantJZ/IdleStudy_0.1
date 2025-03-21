@@ -16,30 +16,23 @@ struct FishBusketView: View {
             ZStack {
                 // 主要内容视图
                 contentView
-                
-                // 自定义返回按钮
-                VStack {
-                    HStack {
-                        Button {
-                            showFishBusket = false
-                        } label: {
-                            Image(systemName: "chevron.left.circle.fill")
-                                .font(.system(size: 28))
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.leading, 20)
-                        .padding(.top, 16)
-                        
-                        Spacer()
-                    }
-                    Spacer()
-                }
             }
             .navigationTitle("🐟 我的鱼篓")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            // 在导航栏或其他地方添加一个清空按钮
+            .navigationBarBackButtonHidden(true) // 隐藏系统自带的返回按钮
             .toolbar {
+                // 左侧：自定义返回按钮
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        showFishBusket = false
+                    } label: {
+                        Image(systemName: "chevron.left.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(.blue)
+                    }
+                }
+                
+                // 右侧：清空按钮
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("清空") {
                         clearAllFishes()
@@ -49,6 +42,7 @@ struct FishBusketView: View {
         }
         .onAppear(perform: loadFishData)
     }
+    
     
     // MARK: - 主内容视图
     private var contentView: some View {

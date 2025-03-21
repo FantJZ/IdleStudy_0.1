@@ -46,7 +46,8 @@ struct FishInfoView: View {
         
         // 将 FishInfoItem 转换为 FishInFishBusket 结构
         let newFish = FishInFishBusket(
-            image: info.image, name: info.fishName,
+            image: info.image,
+            name: info.fishName,
             quality: info.quality,
             weight: info.weight,
             price: info.price,
