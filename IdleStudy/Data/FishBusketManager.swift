@@ -20,7 +20,7 @@ class FishBusketManager {
     }
     
     // MARK: - 改进的字典操作方法
-    /// 保存单条鱼数据
+    /// 保存单条鱼数据（追加方式）
     func saveFish(_ fish: FishInFishBusket) throws {
         var currentData = (try? loadAllFishes()) ?? [:]
         let fishID = UUID().uuidString
@@ -44,10 +44,16 @@ class FishBusketManager {
         return try migrateDataStructure(rawDict)
     }
     
-    /// 新增方法：直接返回鱼数据数组，便于遍历解码
+    /// 返回所有鱼数据的数组，每个元素是单条鱼的字典
     func loadFishArray() throws -> [[String: Any]] {
         let allFishes = try loadAllFishes()
         return Array(allFishes.values)
+    }
+    
+    // MARK: - 新增：清空鱼篓
+    func removeAllFishes() throws {
+        // 将文件内容置空
+        try saveAllFishes([:])
     }
     
     // MARK: - 私有方法
@@ -150,7 +156,7 @@ extension FishBusketManager {
         if allFishes.count == 1, let value = allFishes.values.first {
             return value
         } else {
-            // 否则将所有鱼数据合并成一个字典返回
+            // 否则将所有鱼数据合并成一个字典返回（字段会互相覆盖）
             var merged: [String: Any] = [:]
             for (_, dict) in allFishes {
                 for (k, v) in dict {

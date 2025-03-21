@@ -38,6 +38,14 @@ struct FishBusketView: View {
             .navigationTitle("🐟 我的鱼篓")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
+            // 在导航栏或其他地方添加一个清空按钮
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("清空") {
+                        clearAllFishes()
+                    }
+                }
+            }
         }
         .onAppear(perform: loadFishData)
     }
@@ -127,7 +135,7 @@ extension FishBusketView {
     }
 }
 
-// MARK: - 数据加载逻辑
+// MARK: - 数据加载 & 清空逻辑
 extension FishBusketView {
     private func loadFishData() {
         guard !isLoading else { return }
@@ -137,7 +145,7 @@ extension FishBusketView {
         
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                // 使用新的方法加载所有鱼数据数组
+                // 不要用 loadDictionary()，改用 loadFishArray()
                 let fishArray = try FishBusketManager.shared.loadFishArray()
                 
                 // 转换数据模型
@@ -148,6 +156,7 @@ extension FishBusketView {
                 
                 DispatchQueue.main.async {
                     withAnimation(.easeInOut(duration: 0.3)) {
+                        // 按照价格排序，也可以换成别的排序逻辑
                         self.fishes = decodedData.sorted { $0.price > $1.price }
                         self.isLoading = false
                     }
@@ -186,9 +195,20 @@ extension FishBusketView {
             self.isLoading = false
         }
     }
+    
+    /// 清空所有鱼
+    private func clearAllFishes() {
+        do {
+            try FishBusketManager.shared.removeAllFishes()
+            // 清空后刷新UI
+            self.fishes = []
+        } catch {
+            self.errorMessage = "无法清空鱼篓: \(error.localizedDescription)"
+        }
+    }
 }
 
-// MARK: - 鱼卡片组件
+// MARK: - 鱼卡片组件示例
 struct FishCardView: View {
     let fish: FishInFishBusket
     @State private var isExpanded = false
@@ -209,7 +229,6 @@ struct FishCardView: View {
         }
     }
     
-    // 头部区域（图片和名称）
     private var headerSection: some View {
         VStack(spacing: 10) {
             // 图片显示（支持本地和系统图标）
@@ -220,7 +239,7 @@ struct FishCardView: View {
                 } else {
                     Image(systemName: fish.image)
                         .resizable()
-                        .foregroundColor(qualityColor)
+                        .foregroundColor(.blue)
                 }
             }
             .scaledToFit()
@@ -240,94 +259,44 @@ struct FishCardView: View {
                     .font(.caption)
                     .bold()
                     .padding(4)
-                    .background(rarityColor.opacity(0.2))
+                    .background(Color.blue.opacity(0.2))
                     .cornerRadius(4)
             }
         }
     }
     
-    // 详细信息区域
     @ViewBuilder
     private var detailsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            infoRow(label: "品质", value: fish.quality, color: qualityColor)
+            infoRow(label: "品质", value: fish.quality)
             infoRow(label: "重量", value: String(format: "%.2f", fish.weight), suffix: "kg")
             infoRow(label: "价格", value: "\(fish.price)", suffix: "金币")
             
             if isExpanded {
                 Divider()
-                additionalDetails
+                Text("捕获时间: \(Date(), style: .date)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
     }
     
-    // 扩展详细信息
-    private var additionalDetails: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("捕获时间")
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Text(Date(), style: .date)
-                .font(.caption)
-            
-            Text("特殊属性")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.top, 4)
-            Text("深水鱼种 | 夜行性")
-                .font(.caption)
-        }
-    }
-    
-    // 通用信息行组件
-    private func infoRow(label: String, value: String, suffix: String? = nil, color: Color = .primary) -> some View {
+    private func infoRow(label: String, value: String, suffix: String? = nil) -> some View {
         HStack {
-            Text(label + ":")
+            Text("\(label):")
                 .foregroundColor(.secondary)
-                .font(.subheadline)
-            
-            HStack(spacing: 4) {
-                Text(value)
-                    .foregroundColor(color)
-                if let suffix = suffix {
-                    Text(suffix)
-                        .foregroundColor(.secondary)
-                }
+            Text(value)
+            if let suffix = suffix {
+                Text(suffix).foregroundColor(.secondary)
             }
-            
             Spacer()
         }
-    }
-    
-    // 品质颜色计算
-    private var qualityColor: Color {
-        switch fish.quality {
-        case "普通": return .gray
-        case "精良": return .blue
-        case "史诗": return .purple
-        case "传说": return .orange
-        default: return .primary
-        }
-    }
-    
-    // 稀有度颜色计算
-    private var rarityColor: Color {
-        switch fish.rarity {
-        case "常见": return .green
-        case "稀有": return .blue
-        case "罕见": return .purple
-        case "神话": return .red
-        default: return .secondary
-        }
+        .font(.subheadline)
     }
 }
 
-// MARK: - 预览提供器
+// MARK: - 预览
 #Preview {
     FishBusketView(showFishBusket: .constant(true))
-        .task {
-            // 调试文件状态
-            FishBusketManager.shared.debugFileStatus()
-        }
 }
 
