@@ -11,7 +11,7 @@ import SwiftUI
 
 struct topBarView: View {
   @Binding var startTiming: Bool
-  @Binding var showListFishes: Bool
+  @Binding var showFishGuide: Bool
   @Binding var showFishBusket: Bool
 
   var body: some View {
@@ -28,7 +28,7 @@ struct topBarView: View {
         Spacer()
         
         Button(action: {
-          self.showListFishes = true
+          self.showFishGuide = true
         }) {
           Image(systemName: "book.pages")
             .foregroundColor(.black)
@@ -58,5 +58,5 @@ struct topBarView: View {
   }
 }
 #Preview {
-  topBarView(startTiming: .constant(false), showListFishes: .constant(true), showFishBusket: .constant(true))
+  topBarView(startTiming: .constant(false), showFishGuide: .constant(true), showFishBusket: .constant(true))
 }

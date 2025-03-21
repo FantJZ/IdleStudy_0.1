@@ -43,6 +43,7 @@ class FishPresenter: ObservableObject {
         if self.remainingSeconds % 60 == 0 && self.remainingSeconds > 0 {
           print("定时器到了一分钟")
           self.isOneMinute = true
+            FishGuideManager.shared.syncFromBusket()
         }
       } else {
         self.stopTimer()
