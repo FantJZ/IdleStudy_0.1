@@ -1,111 +1,139 @@
 [
     {
-        "name" : "金鱼",
-        "image" : "square.and.arrow.up",
-        "rarity" : "普通",
-        "pond" : "小池塘",
-        "maximum weight" : 1.50,
-        "minimum weight" : 0.20,
-        "price" : 10
-    },
-    
-    {
-        "name" : "鲫鱼",
-        "image" : "square.and.arrow.down",
+        "name" : "草鱼",
+        "image" : "Fishes_grassCrap",
         "rarity" : "普通",
         "pond" : "小池塘",
         "maximum weight" : 2.00,
         "minimum weight" : 0.50,
-        "price" : 15
+        "price" : 10
     },
     
     {
-        "name" : "泥鳅",
-        "image" : "square.and.arrow.down",
+        "name" : "金鱼",
+        "image" : "Fishes_goldfish",
         "rarity" : "普通",
         "pond" : "小池塘",
-        "maximum weight" : 1.50,
+        "maximum weight" : 1.00,
         "minimum weight" : 0.05,
         "price" : 10
     },
     
     {
-        "name" : "赖克宝",
-        "image" : "square.and.arrow.down",
-        "rarity" : "稀有",
+        "name" : "鲤鱼",
+        "image" : "Fishes_carp",
+        "rarity" : "普通",
+        "pond" : "小池塘",
+        "maximum weight" : 3.50,
+        "minimum weight" : 1.00,
+        "price" : 10
+    },
+    
+    {
+        "name" : "鲫鱼",
+        "image" : "Fishes_crucianCarp",
+        "rarity" : "普通",
+        "pond" : "小池塘",
+        "maximum weight" : 1.75,
+        "minimum weight" : 0.20,
+        "price" : 10
+    },
+    
+    {
+        "name" : "青蛙",
+        "image" : "Fishes_frog",
+        "rarity" : "普通",
         "pond" : "小池塘",
         "maximum weight" : 1.00,
         "minimum weight" : 0.50,
-        "price" : 30
+        "price" : 10
     },
     
+    
+    
     {
-        "name" : "白云金丝",
-        "image" : "square.and.arrow.down",
+        "name" : "银鳞鲤鱼",
+        "image" : "Fishes_silverCarp",
         "rarity" : "稀有",
         "pond" : "小池塘",
-        "maximum weight" : 1.50,
-        "minimum weight" : 0.10,
-        "price" : 30
+        "maximum weight" : 3.00,
+        "minimum weight" : 1.00,
+        "price" : 50
     },
     
     {
-        "name" : "孔雀鱼",
-        "image" : "square.and.arrow.down",
+        "name" : "黄金金鱼",
+        "image" : "Fishes_goldGoldfish",
         "rarity" : "稀有",
         "pond" : "小池塘",
-        "maximum weight" : 1.50,
-        "minimum weight" : 0.10,
-        "price" : 30
+        "maximum weight" : 4.00,
+        "minimum weight" : 2.00,
+        "price" : 50
     },
     
     {
-        "name" : "天堂鱼",
-        "image" : "square.and.arrow.down",
+        "name" : "钻石青蛙",
+        "image" : "Fishes_diamondFrog",
+        "rarity" : "稀有",
+        "pond" : "小池塘",
+        "maximum weight" : 3.00,
+        "minimum weight" : 1.00,
+        "price" : 50
+    },
+    
+    
+    
+    {
+        "name" : "幻影鱼",
+        "image" : "Fishes_illusoryPhantomFish",
         "rarity" : "史诗",
         "pond" : "小池塘",
-        "maximum weight" : 1.85,
-        "minimum weight" : 0.20,
-        "price" : 60
-    },
-    
-    {
-        "name" : "锦鲤",
-        "image" : "square.and.arrow.down",
-        "rarity" : "史诗",
-        "pond" : "小池塘",
-        "maximum weight" : 5.00,
-        "minimum weight" : 0.30,
-        "price" : 60
-    },
-    
-    {
-        "name" : "丹顶锦鲤",
-        "image" : "square.and.arrow.down",
-        "rarity" : "传说",
-        "pond" : "小池塘",
-        "maximum weight" : 5.00,
-        "minimum weight" : 0.30,
-        "price" : 150
-    },
-    
-    {
-        "name" : "金龙鱼",
-        "image" : "square.and.arrow.down",
-        "rarity" : "传说",
-        "pond" : "小池塘",
-        "maximum weight" : 7.00,
+        "maximum weight" : 3.00,
         "minimum weight" : 0.50,
         "price" : 150
     },
     
     {
-        "name" : "你被骗了鱼",
-        "image" : "square.and.arrow.down",
+        "name" : "星幻鱼",
+        "image" : "Fishes_dreamPhantomFish",
+        "rarity" : "史诗",
+        "pond" : "小池塘",
+        "maximum weight" : 5.00,
+        "minimum weight" : 1.00,
+        "price" : 150
+    },
+    
+    
+    
+    {
+        "name" : "龙吟麟鱼",
+        "image" : "Fishes_dragonScaleFish",
+        "rarity" : "传说",
+        "pond" : "小池塘",
+        "maximum weight" : 2.00,
+        "minimum weight" : 0.30,
+        "price" : 300
+    },
+    
+    {
+        "name" : "玉",
+        "image" : "Fishes_jade",
+        "rarity" : "传说",
+        "pond" : "小池塘",
+        "maximum weight" : 5.00,
+        "minimum weight" : 1.00,
+        "price" : 300
+    },
+    
+    
+    
+    {
+        "name" : "池塘霸主",
+        "image" : "Fishes_pondBoss",
         "rarity" : "至臻",
         "pond" : "小池塘",
-        "maximum weight" : 1.00,
-        "minimum weight" : 0.01,
-        "price" : 1
+        "maximum weight" : 16.00,
+        "minimum weight" : 5.00,
+        "price" : 3000
     },
 ]

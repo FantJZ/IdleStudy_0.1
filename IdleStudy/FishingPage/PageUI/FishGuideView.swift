@@ -1,45 +1,37 @@
 import SwiftUI
 
 struct FishGuideView: View {
-    // 是否处于管理员模式（决定是否显示“清空图鉴”按钮）
+    // 是否处于管理员模式
     @State private var isAdminMode: Bool = false
-    
-    // 从 Manager 获取所有图鉴数据
+    // 图鉴数据
     @State private var guideEntries: [FishGuideEntry] = []
     
     @Environment(\.dismiss) private var dismiss
     
     @Binding var showFishGuide: Bool
     
-    // 自定义稀有度的显示顺序（从最稀有到最普通）
+    // 自定义稀有度顺序
     private let rarityOrder: [String] = ["至臻", "传说", "史诗", "稀有", "普通"]
     
     var body: some View {
         NavigationStack {
             List {
-                // 先按 pond 分组
+                // 按 pond 分组
                 let pondGroups = Dictionary(grouping: guideEntries, by: \.pond)
                 
-                // 对每个池塘创建一个 Section
                 ForEach(pondGroups.keys.sorted(), id: \.self) { pondName in
                     Section {
-                        // 在该池塘下，按照自定义顺序列出每种稀有度
                         ForEach(rarityOrder, id: \.self) { r in
-                            // 找出该池塘里、该稀有度的所有鱼
                             let fishesOfThisRarity = pondGroups[pondName]?.filter { $0.rarity == r } ?? []
-                            
-                            // 如果这个稀有度下没有鱼，就跳过
                             if !fishesOfThisRarity.isEmpty {
-                                // 副标题：稀有度
                                 Text(r)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                     .padding(.top, 4)
                                 
-                                // 显示这些鱼
                                 ForEach(fishesOfThisRarity) { entry in
                                     NavigationLink {
-                                        // 点击进入详情页面
+                                        // 详情页面
                                         FishGuideDetailView(entry: entry)
                                     } label: {
                                         FishGuideRow(entry: entry)
@@ -48,7 +40,6 @@ struct FishGuideView: View {
                             }
                         }
                     } header: {
-                        // 池塘名称作为 Section 的标题
                         Text(pondName)
                             .font(.headline)
                     }
@@ -58,16 +49,41 @@ struct FishGuideView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu("更多") {
-                        // 切换管理员模式
                         Toggle("管理员模式", isOn: $isAdminMode)
-                        
-                        // 只有在管理员模式时，才显示“清空图鉴”按钮
                         if isAdminMode {
+                            // 清空图鉴
                             Button(role: .destructive) {
                                 FishGuideManager.shared.clearGuide()
                                 refreshData()
                             } label: {
                                 Text("清空图鉴")
+                            }
+                            // 解锁所有鱼
+                            Button("解锁所有鱼") {
+                                FishGuideManager.shared.unlockAllFishes()
+                                refreshData()
+                            }
+                            // 为所有鱼添加炫彩
+                            Button("添加炫彩") {
+                                FishGuideManager.shared.setAllRainbow()
+                                refreshData()
+                            }
+                            // 设置所有鱼钓到总数量
+                            Button("总数=100") {
+                                FishGuideManager.shared.setAllCaughtCount(to: 100)
+                                refreshData()
+                            }
+                            Button("总数=500") {
+                                FishGuideManager.shared.setAllCaughtCount(to: 500)
+                                refreshData()
+                            }
+                            Button("总数=1000") {
+                                FishGuideManager.shared.setAllCaughtCount(to: 1000)
+                                refreshData()
+                            }
+                            Button("总数=10000") {
+                                FishGuideManager.shared.setAllCaughtCount(to: 10000)
+                                refreshData()
                             }
                         }
                     }
@@ -81,58 +97,107 @@ struct FishGuideView: View {
                             .foregroundColor(.blue)
                     }
                 }
-
             }
             .onAppear {
                 refreshData()
-                guideEntries = FishGuideManager.shared.guideEntries
             }
         }
     }
     
-    /// 刷新数据：从 Manager 拉取最新的图鉴
     private func refreshData() {
-        // 同步 adminMode
         FishGuideManager.shared.adminMode = isAdminMode
-        
-        // 拉取所有图鉴信息
         guideEntries = FishGuideManager.shared.guideEntries
     }
 }
 
-/// 图鉴的行视图：如果未发现，显示黑图 & ???；已发现则显示真名 & 图片
+/// 列表行视图：
+/// - 行背景根据 caughtCount 显示颜色；
+/// - 若钓到最大可能体重，只在“图片区域”静态半透明炫彩覆盖。
 struct FishGuideRow: View {
     let entry: FishGuideEntry
     
+    /// 是否钓到最大可能体重
+    private var hasMaxWeight: Bool {
+        (entry.caughtMaxWeight ?? 0) >= entry.maxWeightPossible - 0.00001
+    }
+    
     var body: some View {
         HStack(spacing: 12) {
-            if entry.discovered {
-                // 显示真实图片
-                if let img = UIImage(named: entry.image) {
-                    Image(uiImage: img)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
+            // 图片 + (可能的炫彩)
+            ZStack {
+                // 显示鱼图或黑方块
+                if entry.discovered {
+                    if let img = UIImage(named: entry.image) {
+                        Image(uiImage: img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    } else {
+                        Image(systemName: entry.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    }
                 } else {
-                    Image(systemName: entry.image)
-                        .resizable()
-                        .scaledToFit()
+                    Rectangle()
+                        .foregroundColor(.black)
                         .frame(width: 40, height: 40)
                 }
                 
-                Text(entry.name)
-            } else {
-                // 未发现：显示黑色占位图 & ??? 名称
-                Rectangle()
-                    .foregroundColor(.black)
+                // 若已达成最大体重，则在图片上叠加半透明彩虹
+                if hasMaxWeight {
+                    LinearGradient(
+                        gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple]),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                    .opacity(0.5)
                     .frame(width: 40, height: 40)
+                }
+            }
+            
+            // 文字信息
+            if entry.discovered {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(entry.name)
+                    Text("钓到次数：\(entry.caughtCount)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            } else {
                 Text("???")
+            }
+            
+            Spacer()
+        }
+        .padding(6)
+        .background(rowBackground)
+        .cornerRadius(8)
+    }
+    
+    /// 行背景：根据 caughtCount 显示颜色
+    @ViewBuilder
+    private var rowBackground: some View {
+        if !entry.discovered {
+            Color.clear
+        } else {
+            switch entry.caughtCount {
+            case 10000...:
+                Color.red.opacity(0.3)
+            case 1000...:
+                Color.yellow.opacity(0.3)
+            case 500...:
+                Color.purple.opacity(0.3)
+            case 100...:
+                Color.blue.opacity(0.3)
+            default:
+                Color.clear
             }
         }
     }
 }
 
-/// 图鉴的详情页面
+/// 图鉴详情页保持不变
 struct FishGuideDetailView: View {
     let entry: FishGuideEntry
     
@@ -190,6 +255,8 @@ struct FishGuideDetailView: View {
                 } else {
                     Text("玩家钓到的最大体重：暂无")
                 }
+                
+                Text("已钓数量：\(entry.caughtCount)")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -221,6 +288,8 @@ struct FishGuideDetailView: View {
     }
 }
 
-#Preview{
+// MARK: - 预览
+#Preview {
     FishGuideView(showFishGuide: .constant(true))
 }
+
