@@ -1,33 +1,38 @@
-//
-//  SlideBar.swift
-//  IdleStudy
-//
-//  Created by JZ on 2025/3/17.
-//
-
 import SwiftUI
 
 struct SlideBar: View {
     @Binding var selectedTime: Double
 
-    // 将原先的 let 改为计算属性
+    // 小时
     var selectedHours: Int {
         Int(selectedTime / 60)
     }
 
+    // 分钟（除去小时后剩余的分钟数）
     var selectedMinute: Int {
-        // 注意这里需要把结果转换为 Int
-        Int((selectedTime - (Double(selectedHours)) * 60))
+        Int(selectedTime - Double(selectedHours) * 60)
     }
 
     var body: some View {
-        Text("选择时间：\(selectedHours) 小时 \(selectedMinute) 分钟")
-            .font(.headline)
-        Slider(value: $selectedTime, in: 0...720, step: 1)
-            .padding(.horizontal)
+        VStack(spacing: 16) {
+            Text("选择时间：\(selectedHours) 小时 \(selectedMinute) 分钟")
+                .font(.headline)
+
+            Slider(value: $selectedTime, in: 0...720, step: 1)
+                .padding(.horizontal)
+                .onChange(of: selectedTime) { newValue in
+                    // 当值为 0, 10, 20, 30... 等等时，触发一次震动
+                    if newValue.truncatingRemainder(dividingBy: 10) == 0 {
+                        // iOS 设备上的震动反馈
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                        generator.impactOccurred()
+                    }
+                }
+        }
     }
 }
 
 #Preview {
     SlideBar(selectedTime: .constant(200))
 }
+
