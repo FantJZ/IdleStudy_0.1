@@ -19,6 +19,7 @@ struct FishGuideEntry: Identifiable, Codable {
     let minWeightPossible: Double
     let maxWeightPossible: Double
     let image: String
+    let exp: Int
     
     /// 玩家是否已发现该鱼
     var discovered: Bool
@@ -68,6 +69,7 @@ class FishGuideManager {
                     minWeightPossible: fish.minimumWeight,
                     maxWeightPossible: fish.maximumWeight,
                     image: fish.image,
+                    exp: fish.exp,
                     discovered: false,
                     caughtMinWeight: nil,
                     caughtMaxWeight: nil,

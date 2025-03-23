@@ -1,10 +1,3 @@
-//
-//  jsonDecode.swift
-//  IdleStudy
-//
-//  Created by JZ on 2025/3/16.
-//
-
 import Foundation
 
 // MARK: - Fish
@@ -13,10 +6,11 @@ struct Fish: Codable {
     let name: String
     let image: String
     let rarity: String
-    let pond: String
+    let pond: String          // 从 JSON 里解析到的池塘名
     let maximumWeight: Double
     let minimumWeight: Double
     let price: Int
+    let exp: Int
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -26,6 +20,7 @@ struct Fish: Codable {
         case maximumWeight = "maximum weight"
         case minimumWeight = "minimum weight"
         case price
+        case exp
     }
 
     var infoItem: FishInfoItem {
@@ -42,7 +37,8 @@ struct Fish: Codable {
             weight: weight,
             price: price,
             rarity: rarity,
-            image: image
+            image: image,
+            exp: exp
         )
     }
 }
@@ -129,7 +125,14 @@ extension Fish {
             qualityFactor = 1.0
         }
 
-        return Int((basePrice + weightFactor) * qualityFactor)
+        var finalPrice = (basePrice + weightFactor) * qualityFactor
+        
+        // 如果想让“山涧溪流”池塘的鱼价格翻倍（示例）
+        if self.pond == "山涧溪流" {
+            finalPrice *= 2
+        }
+        
+        return Int(finalPrice)
     }
 }
 
@@ -142,6 +145,7 @@ struct FishInfoItem {
     let price: Int
     let rarity: String
     let image: String
+    let exp: Int
 }
 
 // MARK: - 抽奖机
@@ -169,5 +173,4 @@ func RandomEvent(_ count: Int, _ probabilities: Double...) -> Int? {
     }
     return nil
 }
-
 

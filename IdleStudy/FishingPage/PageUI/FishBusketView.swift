@@ -27,6 +27,9 @@ struct FishBusketView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.white
+                            .ignoresSafeArea()
+
                 // 主要内容视图
                 contentView
             }

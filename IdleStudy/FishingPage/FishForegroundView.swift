@@ -12,7 +12,8 @@ struct ForegroundView: View {
   @State var showFishGuide: Bool = false
   @State var showSlideBar: Bool = true
   @State var showFishBusket: Bool = false
-
+    @State var showExperienceBar: Bool = false
+    
   /// 局部变量
   @EnvironmentObject private var presenter: FishPresenter
 
@@ -40,7 +41,10 @@ struct ForegroundView: View {
 
         if self.showSlideBar == true {
           SlideBar(selectedTime: self.$presenter.selectedTime)
+        } else {
+            ExperienceBarView(experienceManager: ExperienceManager())
         }
+
         // 底部按钮
         StartandEndButtons(
           showSlideBar: self.$showSlideBar,
@@ -58,9 +62,6 @@ struct ForegroundView: View {
       if self.showFishBusket == true {
           FishBusketView(showFishBusket: $showFishBusket)
       }
-        
-    //显示图鉴
-        
     }
   }
 }

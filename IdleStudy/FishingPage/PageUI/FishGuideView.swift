@@ -130,6 +130,8 @@ struct FishGuideRow: View {
                     if let img = UIImage(named: entry.image) {
                         Image(uiImage: img)
                             .resizable()
+                            .interpolation(.none)
+                            .antialiased(false)
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                     } else {
@@ -202,35 +204,39 @@ struct FishGuideDetailView: View {
     let entry: FishGuideEntry
     
     var body: some View {
-        VStack(spacing: 20) {
-            if !entry.discovered {
-                Rectangle()
-                    .foregroundColor(.black)
-                    .frame(width: 100, height: 100)
-                Text("???")
-                    .font(.title)
-            } else {
-                if let img = UIImage(named: entry.image) {
-                    Image(uiImage: img)
-                        .resizable()
-                        .scaledToFit()
+        ZStack {
+            VStack(spacing: 20) {
+                if !entry.discovered {
+                    Rectangle()
+                        .foregroundColor(.black)
                         .frame(width: 100, height: 100)
+                    Text("???")
+                        .font(.title)
                 } else {
-                    Image(systemName: entry.image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
+                    if let img = UIImage(named: entry.image) {
+                        Image(uiImage: img)
+                            .resizable()
+                            .interpolation(.none)
+                            .antialiased(false)
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                    } else {
+                        Image(systemName: entry.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                    }
+                    Text(entry.name)
+                        .font(.title)
                 }
-                Text(entry.name)
-                    .font(.title)
+                
+                infoSection
             }
-            
-            infoSection
+            .padding()
+            .background(backgroundView)
+            .navigationTitle("图鉴详情")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .padding()
-        .background(backgroundView)
-        .navigationTitle("图鉴详情")
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     @ViewBuilder

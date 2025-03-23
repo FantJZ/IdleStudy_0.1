@@ -10,8 +10,9 @@ struct FishInFishBusket: Identifiable, Codable {
     let weight: Double
     let price: Int
     let rarity: String
+    let exp: Int
     
     enum CodingKeys: String, CodingKey {
-        case image, name, quality, weight, price, rarity
+        case image, name, quality, weight, price, rarity, exp
     }
 }

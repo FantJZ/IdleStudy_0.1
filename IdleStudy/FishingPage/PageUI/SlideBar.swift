@@ -22,13 +22,18 @@ struct SlideBar: View {
                 .padding(.horizontal)
                 .onChange(of: selectedTime) { newValue in
                     // 当值为 0, 10, 20, 30... 等等时，触发一次震动
-                    if newValue.truncatingRemainder(dividingBy: 10) == 0 {
+                    if newValue.truncatingRemainder(dividingBy: 1) == 0 {
                         // iOS 设备上的震动反馈
                         let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
                     }
                 }
         }
+        .padding(.all, 10)
+        .background(Color.blue.opacity(0.9))
+        .cornerRadius(20)
+        .shadow(radius: 5)
+
     }
 }
 

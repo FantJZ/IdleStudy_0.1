@@ -2,11 +2,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        FishView()
+        PondSelectionView()
     }
 }
 // 预览
 #Preview {
     ContentView()
+            .environmentObject(PondStore())
 }
 

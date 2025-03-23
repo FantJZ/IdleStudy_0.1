@@ -29,13 +29,7 @@ struct StartandEndButtons: View {
           .cornerRadius(20)
           .font(.largeTitle)
       }
-//            // 用 sheet 弹出时间选择器
-//            .sheet(isPresented: $isStartPressed) {
-//                TimeSelectorPopup(
-//                    selectedTime: $selectedTime,
-//                    startTiming: $startTiming
-//                )
-//            }
+
     } else {
       // ---- End 按钮 ----
       Button(action: {

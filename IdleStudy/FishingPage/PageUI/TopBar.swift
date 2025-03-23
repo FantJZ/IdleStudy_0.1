@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - 顶部栏
 
 struct topBarView: View {
+    @Environment(\.dismiss) var dismiss
   @Binding var startTiming: Bool
   @Binding var showFishGuide: Bool
   @Binding var showFishBusket: Bool
@@ -19,7 +20,7 @@ struct topBarView: View {
       HStack {
         // Back/Close 按钮
         Button(action: {
-          // ...
+            dismiss()
         }) {
           Image(systemName: "xmark")
             .foregroundColor(.black)
