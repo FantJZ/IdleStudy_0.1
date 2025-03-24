@@ -13,7 +13,7 @@ struct topBarView: View {
     @Environment(\.dismiss) var dismiss
   @Binding var startTiming: Bool
   @Binding var showFishGuide: Bool
-  @Binding var showFishBusket: Bool
+  @Binding var showPlayerBackpack: Bool
 
   var body: some View {
     VStack {
@@ -37,13 +37,13 @@ struct topBarView: View {
         .padding(.trailing)
         
         Button(action: {
-          self.showFishBusket = true
+            self.showPlayerBackpack = true
         }) {
           Image(systemName: "backpack")
             .foregroundColor(.black)
         }
         .padding(.trailing)
-      }
+       }
       
 
       // 当开始计时后，显示正向 & 倒计时
@@ -56,8 +56,9 @@ struct topBarView: View {
         .cornerRadius(10)
       }
     }
+    .padding()
   }
 }
 #Preview {
-  topBarView(startTiming: .constant(false), showFishGuide: .constant(true), showFishBusket: .constant(true))
+    topBarView(startTiming: .constant(false), showFishGuide: .constant(true), showPlayerBackpack: .constant(true))
 }

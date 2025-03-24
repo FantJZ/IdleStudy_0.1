@@ -148,29 +148,5 @@ struct FishInfoItem {
     let exp: Int
 }
 
-// MARK: - 抽奖机
 
-/// 一个简单的随机事件函数：给定 count 和 probabilities，返回 1-based 的随机结果
-func RandomEvent(_ count: Int, _ probabilities: Double...) -> Int? {
-    guard probabilities.count == count else {
-        print("错误：期望 \(count) 个概率，实际给了 \(probabilities.count) 个")
-        return nil
-    }
-
-    let total = probabilities.reduce(0, +)
-    guard total > 0 else {
-        print("错误：概率之和必须大于 0")
-        return nil
-    }
-
-    let randomValue = Double.random(in: 0 ..< total)
-    var cumulative = 0.0
-    for i in 0 ..< count {
-        cumulative += probabilities[i]
-        if randomValue < cumulative {
-            return i + 1
-        }
-    }
-    return nil
-}
 

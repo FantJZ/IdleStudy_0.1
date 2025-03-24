@@ -52,10 +52,11 @@ struct ExperienceBarView: View {
             // 左侧圆形显示等级
             ZStack {
                 Circle()
-                    .stroke(lineWidth: 5)
-                    .frame(width: 50, height: 50)
+                    .stroke(lineWidth: 2)
+                    .frame(width: 35, height: 35)
                     .shadow(radius: 5)
                 Text("\(experienceManager.level)")
+                    .minimumScaleFactor(0.5)
                     .foregroundStyle(.black)
                     .font(.headline)
             }
@@ -80,6 +81,7 @@ struct ExperienceBarView: View {
             }
             .frame(height: 20)
         }
+        .frame(width: 300, height: 30)
         .padding(.all, 10)
         .background(Color.blue.opacity(0.9))
         .cornerRadius(20)

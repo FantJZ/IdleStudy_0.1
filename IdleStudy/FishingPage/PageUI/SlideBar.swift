@@ -29,6 +29,7 @@ struct SlideBar: View {
                     }
                 }
         }
+        .frame(width: 350, height: 60)
         .padding(.all, 10)
         .background(Color.blue.opacity(0.9))
         .cornerRadius(20)

@@ -40,7 +40,7 @@ class FishPresenter: ObservableObject {
         self.remainingSeconds -= 1
         print("定时操作: \(self.remainingSeconds)")
 
-        if self.remainingSeconds % 60 == 0 && self.remainingSeconds > 0 {
+        if self.remainingSeconds % 1 == 0 && self.remainingSeconds > 0 {
           print("定时器到了一分钟")
           self.isOneMinute = true
         }
