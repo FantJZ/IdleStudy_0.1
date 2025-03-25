@@ -114,20 +114,18 @@ struct FishDataPopsOut: View {
             exp: fish.exp
         )
         
-        do {
-            try FishBusketManager.shared.saveFish(newFish)
-            print("✅ 已追加保存一条新鱼: \(newFish)")
-        } catch {
-            print("❌ 保存鱼数据失败: \(error)")
-        }
+        // 1. 先放到内存数组里
+        FishBusketManager.shared.allFishes.append(newFish)
         
-        do {
-            let allFishes = try FishBusketManager.shared.loadAllFishes()
-            print("✅ 验证读取到的数据：\(allFishes)")
-        } catch {
-            print("❌ 验证读取失败：\(error)")
-        }
+        // 2. 调用 saveFishes() 写入本地文件
+        FishBusketManager.shared.saveFishes()
+        print("✅ 已追加保存一条新鱼: \(newFish)")
         
+        // 3. 验证读取到的数据（其实就是内存里的 allFishes）
+        let allFishes = FishBusketManager.shared.allFishes
+        print("✅ 验证读取到的数据：\(allFishes)")
+        
+        // 4. 调试输出
         FishBusketManager.shared.debugFileStatus()
     }
     

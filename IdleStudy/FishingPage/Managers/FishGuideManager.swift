@@ -8,8 +8,6 @@
 import Foundation
 
 /// 单条鱼在图鉴中的信息
-/// - 包含了鱼的基本资料（名称、池塘、稀有度、最大最小重量、图片）
-/// - 还包含玩家是否已发现、玩家曾钓到的最大/最小重量，以及钓到的总次数
 struct FishGuideEntry: Identifiable, Codable {
     let id = UUID()
     
@@ -28,18 +26,18 @@ struct FishGuideEntry: Identifiable, Codable {
     var caughtMinWeight: Double?
     var caughtMaxWeight: Double?
     
-    /// 玩家钓到该鱼的总次数（同名即可）
+    /// 玩家钓到该鱼的总次数
     var caughtCount: Int
 }
 
-/// 图鉴管理器：负责加载所有鱼的基础信息、记录玩家发现状态和钓到的极值、钓到次数
-class FishGuideManager {
+/// 图鉴管理器
+final class FishGuideManager {
     static let shared = FishGuideManager()
     
-    /// 是否开启“管理者模式”——只有在管理者模式下，才能使用一些特殊操作
+    /// 是否开启“管理者模式”
     var adminMode: Bool = false
     
-    /// 内存中的图鉴数据
+    /// 图鉴的内存数据
     private(set) var guideEntries: [FishGuideEntry] = []
     
     private let guideFileName = "FishGuide.json"
@@ -49,9 +47,10 @@ class FishGuideManager {
         loadGuide()
     }
     
-    /// 从本地/Bundle 的 FishDataset.json 加载所有鱼的基础信息，再与本地图鉴数据合并
+    // MARK: - 加载图鉴
+    
+    /// 从 Bundle 的 FishDataset.json 加载基础鱼信息，再与本地 FishGuide.json 合并
     private func loadGuide() {
-        // 1. 加载基础鱼数据
         guard let url = Bundle.main.url(forResource: "FishDataset", withExtension: "json") else {
             print("❌ 未找到 FishDataset.json 文件")
             return
@@ -60,7 +59,7 @@ class FishGuideManager {
             let data = try Data(contentsOf: url)
             let baseFishes = try JSONDecoder().decode([Fish].self, from: data)
             
-            // 2. 将基础数据转换成 FishGuideEntry 的“初始状态”（未发现）
+            // 将基础数据转换成初始的 FishGuideEntry（未发现）
             var baseEntries: [FishGuideEntry] = baseFishes.map { fish in
                 FishGuideEntry(
                     name: fish.name,
@@ -77,9 +76,8 @@ class FishGuideManager {
                 )
             }
             
-            // 3. 读取本地图鉴进度（FishGuide.json），合并到 baseEntries 里
+            // 读取本地图鉴进度（FishGuide.json），合并到 baseEntries
             if let loaded = try? loadLocalGuide() {
-                // 按名字匹配，把 discovered / caughtMinWeight / caughtMaxWeight / caughtCount 合并过来
                 for i in 0..<baseEntries.count {
                     if let savedEntry = loaded.first(where: { $0.name == baseEntries[i].name }) {
                         baseEntries[i].discovered = savedEntry.discovered
@@ -90,14 +88,13 @@ class FishGuideManager {
                 }
             }
             
-            // 最终赋值给 guideEntries
             self.guideEntries = baseEntries
         } catch {
             print("❌ FishGuideManager 加载失败：\(error)")
         }
     }
     
-    /// 从沙盒中读取已存的图鉴进度
+    /// 从沙盒读取已存的图鉴进度
     private func loadLocalGuide() throws -> [FishGuideEntry] {
         let url = try localGuideURL()
         if !FileManager.default.fileExists(atPath: url.path) {
@@ -111,79 +108,49 @@ class FishGuideManager {
     /// 将当前 guideEntries 保存到沙盒
     private func saveLocalGuide() throws {
         let url = try localGuideURL()
-        let data = try JSONEncoder().encode(self.guideEntries)
+        let data = try JSONEncoder().encode(guideEntries)
         try data.write(to: url)
     }
     
     /// 计算沙盒里 FishGuide.json 的路径
     private func localGuideURL() throws -> URL {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            throw NSError(domain: "FishGuideManager", code: 404, userInfo: [NSLocalizedDescriptionKey: "无法获取 documentDirectory"])
+            throw NSError(domain: "FishGuideManager", code: 404,
+                          userInfo: [NSLocalizedDescriptionKey: "无法获取 documentDirectory"])
         }
         return dir.appendingPathComponent(guideFileName)
     }
     
-    // MARK: - 对外的功能方法
+    // MARK: - 新增：记录每条钓到的鱼
     
-    /// 标记玩家发现了某条鱼（比如第一次钓到），并更新 caughtMinWeight/caughtMaxWeight, caughtCount
-    func discoverFish(name: String, caughtWeight: Double?) {
-        guard let index = guideEntries.firstIndex(where: { $0.name == name }) else {
-            print("⚠️ discoverFish：未找到鱼 \(name)")
+    /// 每当用户钓到一条鱼时，调用此方法将其记录到图鉴
+    /// - 如果该鱼尚未发现，则标记 discovered = true
+    /// - 更新 caughtMinWeight / caughtMaxWeight
+    /// - caughtCount += 1
+    func recordCaughtFish(_ fish: FishInFishBusket) {
+        guard let index = guideEntries.firstIndex(where: { $0.name == fish.name }) else {
+            print("⚠️ recordCaughtFish：图鉴中未找到鱼 \(fish.name)")
             return
         }
         
         // 标记已发现
         guideEntries[index].discovered = true
         
-        // 如果有传入钓到的重量，就更新 caughtMinWeight/caughtMaxWeight
-        if let w = caughtWeight {
-            if let oldMin = guideEntries[index].caughtMinWeight {
-                guideEntries[index].caughtMinWeight = min(oldMin, w)
-            } else {
-                guideEntries[index].caughtMinWeight = w
-            }
-            
-            if let oldMax = guideEntries[index].caughtMaxWeight {
-                guideEntries[index].caughtMaxWeight = max(oldMax, w)
-            } else {
-                guideEntries[index].caughtMaxWeight = w
-            }
-        }
-        
-        // 次数 +1
-        guideEntries[index].caughtCount += 1
-        
-        // 保存到本地
-        do {
-            try saveLocalGuide()
-        } catch {
-            print("❌ 保存图鉴失败：\(error)")
-        }
-    }
-    
-    /// 更新玩家钓到的极值 & 次数（如果已经发现该鱼）
-    func updateCaughtWeight(name: String, newWeight: Double) {
-        guard let index = guideEntries.firstIndex(where: { $0.name == name }) else {
-            print("⚠️ updateCaughtWeight：未找到鱼 \(name)")
-            return
-        }
-        // 如果尚未发现，也可以在这里顺便标记发现
-        guideEntries[index].discovered = true
-        
-        // 更新极值
+        // 更新最小 / 最大重量
+        let w = fish.weight
         if let oldMin = guideEntries[index].caughtMinWeight {
-            guideEntries[index].caughtMinWeight = min(oldMin, newWeight)
+            guideEntries[index].caughtMinWeight = min(oldMin, w)
         } else {
-            guideEntries[index].caughtMinWeight = newWeight
+            guideEntries[index].caughtMinWeight = w
         }
         
         if let oldMax = guideEntries[index].caughtMaxWeight {
-            guideEntries[index].caughtMaxWeight = max(oldMax, newWeight)
+            guideEntries[index].caughtMaxWeight = max(oldMax, w)
         } else {
-            guideEntries[index].caughtMaxWeight = newWeight
+            guideEntries[index].caughtMaxWeight = w
         }
         
-        // 次数 +1
+        // 钓到次数 +1
         guideEntries[index].caughtCount += 1
         
         // 保存
@@ -194,21 +161,68 @@ class FishGuideManager {
         }
     }
     
-    /// 清空图鉴：只有在 adminMode = true 时才能执行
+    // MARK: - 批量同步：从 FishBusketManager 中读取所有鱼，统一更新图鉴
+    
+    /// 读取 FishBusketManager.shared.allFishes（数组方式），批量更新图鉴
+    func syncFromBusket() {
+        let fishArray = FishBusketManager.shared.allFishes
+        
+        // 先统计“同名鱼”出现的次数
+        var nameCountMap = [String: Int]()
+        
+        for fish in fishArray {
+            let name = fish.name
+            let w = fish.weight
+            
+            nameCountMap[name, default: 0] += 1
+            
+            // 标记图鉴已发现，并更新极值
+            if let index = guideEntries.firstIndex(where: { $0.name == name }) {
+                guideEntries[index].discovered = true
+                if let oldMin = guideEntries[index].caughtMinWeight {
+                    guideEntries[index].caughtMinWeight = min(oldMin, w)
+                } else {
+                    guideEntries[index].caughtMinWeight = w
+                }
+                if let oldMax = guideEntries[index].caughtMaxWeight {
+                    guideEntries[index].caughtMaxWeight = max(oldMax, w)
+                } else {
+                    guideEntries[index].caughtMaxWeight = w
+                }
+            } else {
+                print("⚠️ 图鉴中未找到此鱼：\(name)")
+            }
+        }
+        
+        // caughtCount = 在鱼篓中出现的数量
+        for (name, count) in nameCountMap {
+            if let index = guideEntries.firstIndex(where: { $0.name == name }) {
+                guideEntries[index].caughtCount = count
+            }
+        }
+        
+        do {
+            try saveLocalGuide()
+            print("✅ syncFromBusket 完成：更新了图鉴信息")
+        } catch {
+            print("❌ syncFromBusket 失败：\(error)")
+        }
+    }
+    
+    // MARK: - 管理员模式下的功能
+    
+    /// 清空图鉴
     func clearGuide() {
         guard adminMode else {
             print("❌ 无法清空：必须在管理员模式下才可操作")
             return
         }
-        
-        // 将所有 discovered = false, caughtMinWeight = nil, caughtMaxWeight = nil, caughtCount = 0
         for i in 0..<guideEntries.count {
             guideEntries[i].discovered = false
             guideEntries[i].caughtMinWeight = nil
             guideEntries[i].caughtMaxWeight = nil
             guideEntries[i].caughtCount = 0
         }
-        
         do {
             try saveLocalGuide()
             print("✅ 已清空图鉴")
@@ -217,58 +231,7 @@ class FishGuideManager {
         }
     }
     
-    // 同步鱼篓：把鱼篓里的鱼都更新到图鉴
-    func syncFromBusket() {
-        do {
-            let fishArray = try FishBusketManager.shared.loadFishArray()
-            
-            // 先统计同名鱼的数量
-            var nameCountMap = [String: Int]()
-            
-            for fishDict in fishArray {
-                let fishInBusket = try FishInFishBusket.from(dictionary: fishDict)
-                let name = fishInBusket.name
-                let w = fishInBusket.weight
-                // 累加计数
-                nameCountMap[name, default: 0] += 1
-                
-                // 在图鉴里查找是否已有这条鱼
-                if let index = guideEntries.firstIndex(where: { $0.name == name }) {
-                    // 标记 discovered = true
-                    guideEntries[index].discovered = true
-                    // 更新极值
-                    if let oldMin = guideEntries[index].caughtMinWeight {
-                        guideEntries[index].caughtMinWeight = min(oldMin, w)
-                    } else {
-                        guideEntries[index].caughtMinWeight = w
-                    }
-                    if let oldMax = guideEntries[index].caughtMaxWeight {
-                        guideEntries[index].caughtMaxWeight = max(oldMax, w)
-                    } else {
-                        guideEntries[index].caughtMaxWeight = w
-                    }
-                } else {
-                    print("⚠️ 图鉴中未找到此鱼：\(name)")
-                }
-            }
-            
-            // 统一更新 caughtCount = 在鱼篓中出现的次数
-            for (name, count) in nameCountMap {
-                if let index = guideEntries.firstIndex(where: { $0.name == name }) {
-                    guideEntries[index].caughtCount = count
-                }
-            }
-            
-            try saveLocalGuide()
-            print("✅ syncFromBusket 完成")
-        } catch {
-            print("❌ syncFromBusket 失败：\(error)")
-        }
-    }
-    
-    // MARK: - 管理员模式下的快捷功能
-    
-    /// 解锁所有鱼（所有 discovered = true）
+    /// 解锁所有鱼
     func unlockAllFishes() {
         guard adminMode else { return }
         for i in 0..<guideEntries.count {
@@ -277,7 +240,7 @@ class FishGuideManager {
         do { try saveLocalGuide() } catch { print("❌ unlockAllFishes 失败: \(error)") }
     }
     
-    /// 为所有鱼“添加炫彩”（相当于把 caughtMaxWeight = maxWeightPossible）
+    /// 为所有鱼“添加炫彩”
     func setAllRainbow() {
         guard adminMode else { return }
         for i in 0..<guideEntries.count {
@@ -287,7 +250,7 @@ class FishGuideManager {
         do { try saveLocalGuide() } catch { print("❌ setAllRainbow 失败: \(error)") }
     }
     
-    /// 设置所有鱼的 caughtCount（方便测试不同颜色效果）
+    /// 设置所有鱼的 caughtCount
     func setAllCaughtCount(to count: Int) {
         guard adminMode else { return }
         for i in 0..<guideEntries.count {
@@ -297,4 +260,3 @@ class FishGuideManager {
         do { try saveLocalGuide() } catch { print("❌ setAllCaughtCount 失败: \(error)") }
     }
 }
-
