@@ -45,8 +45,8 @@ struct PlayerBackpackView: View {
                     }
                 }
                 .frame(maxWidth: 50)
-                .background(Color.white)
             }
+            .background(Color.white)
             
             // 右侧内容视图
             contentView
