@@ -78,18 +78,22 @@ struct FishDataPopsOut: View {
                                 description: info.description,
                                 quantity: 1,
                                 totalCount: 1,
-                                fishedCount: 1
+                                fishedCount: 1,
+                                image: info.image
                             )
                             // 不要直接 append 了，改为:
                             PlayerBackpackManager.shared.addGarbageItem(newGarbage)
 
                             
                         case .treasure(let info):
+                            ExperienceManager.shared.addXP(info.exp)
+                            
                             let newTreasure = BackpackTreasureItem(
                                 name: info.treasureName,
                                 price: info.price,
                                 pond: info.pond,
                                 rarity: info.rarity,
+                                exp: info.exp,
                                 description: info.description,
                                 quantity: 1,
                                 totalCount: 1,

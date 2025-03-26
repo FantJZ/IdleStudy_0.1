@@ -137,11 +137,18 @@ extension PlayerBackpackView {
                                     .aspectRatio(1, contentMode: .fit)
                                 
                                 // 占位图标（因为 BackpackGarbageItem 没有 image 字段）
-                                Image(systemName: "trash")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding(12)
-                                    .foregroundColor(.black)
+                                if !item.image.isEmpty {
+                                    Image(item.image) // 假设 item.image 对应 Asset Catalog 中的图片名
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding(12)
+                                } else {
+                                    Image(systemName: "trash")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding(12)
+                                        .foregroundColor(.black)
+                                }
                             }
                             .onTapGesture {
                                 // 点击后弹出垃圾详情
@@ -424,7 +431,7 @@ struct GarbageDetailView: View {
             
             // 这里同样可以放图片，但 BackpackGarbageItem 没有 image 字段
             // 如果想添加，可自行扩展
-            Image(systemName: "trash")
+            Image(item.image)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 120, height: 120)
@@ -484,27 +491,27 @@ struct PlayerBackpackView_Previews: PreviewProvider {
     static var previews: some View {
         let manager = PlayerBackpackManager.shared
         
-        // 示例：垃圾
-        manager.garbageItems = [
-            BackpackGarbageItem(name: "破鞋子", price: 5, pond: "邻居家的池塘", description: "真破", quantity: 2, totalCount: 5, fishedCount: 5),
-            BackpackGarbageItem(name: "易拉罐", price: 2, pond: "山涧溪流", description: "残渣", quantity: 1, totalCount: 10, fishedCount: 10)
-        ]
-        
-        // 示例：宝藏
-        manager.treasureItems = [
-            BackpackTreasureItem(name: "红宝石", price: 1000, pond: "湖泊水域", rarity: "史诗", description: "闪闪发光", quantity: 2, totalCount: 3, fishedCount: 3)
-        ]
-        
-        // 示例：鱼篓
-        manager.fishBusketItems = [
-            FishInFishBusket(image: "fish", name: "小金鱼", quality: "不错", weight: 1.23, price: 50, rarity: "普通", exp: 10),
-            FishInFishBusket(image: "fish", name: "大鲤鱼", quality: "完美", weight: 2.78, price: 120, rarity: "传说", exp: 20)
-        ]
-        
-        // 示例：鱼库
-        manager.fishLibraryItems = [
-            FishInFishBusket(image: "fish", name: "传奇锦鲤", quality: "绝佳", weight: 5.55, price: 999, rarity: "至臻", exp: 100)
-        ]
+//        // 示例：垃圾
+//        manager.garbageItems = [
+//            BackpackGarbageItem(name: "破鞋子", price: 5, pond: "邻居家的池塘", description: "真破", quantity: 2, totalCount: 5, fishedCount: 5),
+//            BackpackGarbageItem(name: "易拉罐", price: 2, pond: "山涧溪流", description: "残渣", quantity: 1, totalCount: 10, fishedCount: 10)
+//        ]
+//        
+//        // 示例：宝藏
+//        manager.treasureItems = [
+//            BackpackTreasureItem(name: "红宝石", price: 1000, pond: "湖泊水域", rarity: "史诗", description: "闪闪发光", quantity: 2, totalCount: 3, fishedCount: 3)
+//        ]
+//        
+//        // 示例：鱼篓
+//        manager.fishBusketItems = [
+//            FishInFishBusket(image: "fish", name: "小金鱼", quality: "不错", weight: 1.23, price: 50, rarity: "普通", exp: 10),
+//            FishInFishBusket(image: "fish", name: "大鲤鱼", quality: "完美", weight: 2.78, price: 120, rarity: "传说", exp: 20)
+//        ]
+//        
+//        // 示例：鱼库
+//        manager.fishLibraryItems = [
+//            FishInFishBusket(image: "fish", name: "传奇锦鲤", quality: "绝佳", weight: 5.55, price: 999, rarity: "至臻", exp: 100)
+//        ]
         
         manager.selectedTab = .fishbusket
         return PlayerBackpackView(manager: manager, showPlayerBackpack: .constant(true))

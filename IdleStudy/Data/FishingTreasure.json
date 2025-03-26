@@ -1,11 +1,59 @@
     [
         {
-            "name" : "红宝石",
+            "name" : "红宝石碎片",
             "image" : "",
-            "price" : 1000,
+            "price" : 200,
             "rarity" : "普通",
             "exp": 20,
-            "pond" : "邻居家的池塘"
+            "pond" : "邻居家的池塘",
+            "description" : ""
+        },
+        
+        
+        
+        {
+            "name" : "红宝石",
+            "image" : "",
+            "price" : 800,
+            "rarity" : "稀有",
+            "exp": 80,
+            "pond" : "邻居家的池塘",
+            "description" : ""
+        },
+        
+        
+        
+        {
+            "name" : "鱼钩模具",
+            "image" : "",
+            "price" : 1500,
+            "rarity" : "史诗",
+            "exp": 150,
+            "pond" : "邻居家的池塘",
+            "description" : ""
+        },
+        
+        
+        
+        {
+            "name" : "镶嵌钻孔",
+            "image" : "",
+            "price" : 500,
+            "rarity" : "传说",
+            "exp": 250,
+            "pond" : "邻居家的池塘",
+            "description" : ""
+        },
+        
+        
+        
+        {
+            "name" : "加速钓竿",
+            "image" : "",
+            "price" : 10000,
+            "rarity" : "至臻",
+            "exp": 1000,
+            "pond" : "邻居家的池塘",
             "description" : ""
         },
     ]

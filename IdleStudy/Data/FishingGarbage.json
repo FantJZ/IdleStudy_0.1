@@ -1,7 +1,7 @@
 [
     {
         "name" : "邻居的内裤",
-        "image" : "",
+        "image" : "Garbages_neighboursUnderware",
         "price" : 5,
         "pond" : "邻居家的池塘",
         "description" : ""
@@ -9,7 +9,7 @@
     
     {
         "name" : "邻居老婆的内裤",
-        "image" : "",
+        "image" : "Garbage_neighboursWifeUnderware",
         "price" : 20,
         "pond" : "邻居家的池塘",
         "description" : ""
