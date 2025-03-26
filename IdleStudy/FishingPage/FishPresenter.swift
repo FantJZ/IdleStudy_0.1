@@ -39,13 +39,9 @@ class FishPresenter: ObservableObject {
         return
       }
       if self.remainingSeconds > 0 {
-          var stayBackgroundTime: Int = 0
-          stayBackgroundTime = BackgroundTimeManager.shared.secondsSinceLastExit()
 
-          self.remainingSeconds -= (1 + stayBackgroundTime)
+          self.remainingSeconds -= 1
           print("定时操作: \(self.remainingSeconds)")
-          
-          BackgroundTimeManager.shared.resetExitTime()
 
           if self.remainingSeconds % self.timeIntervalTriggerd == 0 && self.remainingSeconds > 0 {
           print("定时器到了一分钟")
@@ -67,6 +63,15 @@ class FishPresenter: ObservableObject {
       self.selectedTime = minutes
       self.startTimer()
   }
+    
+    func subtractOfflineTime() {
+            let offlineSec = BackgroundTimeManager.shared.secondsSinceLastExit()
+            if offlineSec > 0 {
+                self.remainingSeconds = max(self.remainingSeconds - offlineSec, 0)
+                print("已扣除离开时长：\(offlineSec) 秒，剩余：\(self.remainingSeconds)")
+                BackgroundTimeManager.shared.resetExitTime()
+            }
+        }
 }
 
 extension FishPresenter {

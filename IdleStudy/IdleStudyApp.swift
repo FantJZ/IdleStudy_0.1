@@ -21,7 +21,7 @@ struct IdleStudyApp: App {
         }
         .onChange(of: scenePhase) { newPhase in
             switch newPhase {
-            case .background, .inactive:
+            case .background/*, .inactive*/:
                 // 1. 保存背包数据
                 PlayerBackpackManager.shared.saveData()
 //                // 2. 保存 PondStore
