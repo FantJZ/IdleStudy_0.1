@@ -46,13 +46,13 @@
             filePath = "IdleStudy/FishingPage/FishPresenter.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "startTimer()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "984493BB-D2C4-48BD-868C-DED875FF3E03 - e961c51f88995148"
+                  uuid = "984493BB-D2C4-48BD-868C-DED875FF3E03 - e961c51f8899510a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -62,11 +62,11 @@
                   urlString = "file:///Users/jz/Documents/SwiftApp/IdleStudy/IdleStudy/FishingPage/FishPresenter.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35">
+                  startingLineNumber = "37"
+                  endingLineNumber = "37">
                </Location>
                <Location
-                  uuid = "984493BB-D2C4-48BD-868C-DED875FF3E03 - a0e7e585b297ba2a"
+                  uuid = "984493BB-D2C4-48BD-868C-DED875FF3E03 - a0e7e585b297ba68"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -76,8 +76,8 @@
                   urlString = "file:///Users/jz/Documents/SwiftApp/IdleStudy/IdleStudy/FishingPage/FishPresenter.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35">
+                  startingLineNumber = "37"
+                  endingLineNumber = "37">
                </Location>
             </Locations>
          </BreakpointContent>

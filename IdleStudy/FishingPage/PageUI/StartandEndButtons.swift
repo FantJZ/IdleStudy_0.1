@@ -19,8 +19,9 @@ struct StartandEndButtons: View {
       // ---- Start 按钮 ----
       Button(action: {
         // 点下后弹出弹窗，让用户选择时间
-        self.startTiming = true
-        self.showSlideBar = false
+          self.startTiming = true
+          self.showSlideBar = false
+          BackgroundTimeManager.shared.resetExitTime()
       }) {
         Text("Start")
           .foregroundColor(.white)

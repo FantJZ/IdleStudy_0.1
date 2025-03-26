@@ -3,6 +3,7 @@ import SwiftUI
 struct FishView: View {
     @EnvironmentObject var pondStore: PondStore
     @StateObject private var fishPresenter = FishPresenter()
+    @State private var offlineSummary: String = ""
     
     var body: some View {
         ZStack {
@@ -28,6 +29,24 @@ struct FishView: View {
                     .foregroundColor(.gray)
             }
         }
+        .onAppear {
+                    let result = fishPresenter.handleOfflineCatches()
+                    if result.offlineSeconds > 0 {
+                        // 计算小时、分钟、秒
+                        let hours = result.offlineSeconds / 3600
+                        let minutes = (result.offlineSeconds % 3600) / 60
+                        let seconds = result.offlineSeconds % 60
+                        
+                        offlineSummary = """
+                        你离开了 \(hours)小时\(minutes)分钟\(seconds)秒，
+                        在这段时间里，共钓到：
+                        鱼：\(result.fishCount) 条，
+                        垃圾：\(result.garbageCount) 个，
+                        宝藏：\(result.treasureCount) 个。
+                        已全部放入背包！
+                        """
+                    }
+                }
     }
 }
 
