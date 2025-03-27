@@ -137,12 +137,15 @@ class PlayerBackpackManager: ObservableObject {
     
     // MARK: - 示例：售卖全部
     func sellAllGarbage() {
+        CoinsManager.shared.addCoins(totalGarbageValue())
         garbageItems.removeAll()
     }
     func sellAllTreasure() {
+        CoinsManager.shared.addCoins(totalTreasureValue())
         treasureItems.removeAll()
     }
     func sellAllFishBusket() {
+        CoinsManager.shared.addCoins(totalFishBusketValue())
         fishBusketItems.removeAll()
     }
     
@@ -244,4 +247,29 @@ class PlayerBackpackManager: ObservableObject {
     }
 }
 
+extension PlayerBackpackManager {
+    
+    /// 加载任意类型数组并在主线程更新
+    func loadArray<T: Decodable>(from fileName: String, assigningTo keyPath: ReferenceWritableKeyPath<PlayerBackpackManager, [T]>) {
+        DispatchQueue.global().async {
+            do {
+                let fileURL = try self.fileURL(for: fileName)
+                guard FileManager.default.fileExists(atPath: fileURL.path) else {
+                    print("⚠️ 文件不存在: \(fileName)")
+                    return
+                }
+                
+                let data = try Data(contentsOf: fileURL)
+                let decoded = try JSONDecoder().decode([T].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self[keyPath: keyPath] = decoded
+                    print("✅ 成功加载 \(fileName)")
+                }
+            } catch {
+                print("❌ 加载失败 \(fileName): \(error)")
+            }
+        }
+    }
+}
 

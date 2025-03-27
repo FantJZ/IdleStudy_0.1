@@ -1,0 +1,73 @@
+[
+    {
+        "name" : "邻居的内裤",
+        "image" : "Garbages_neighboursUnderware",
+        "price" : 5,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "邻居老婆的内裤",
+        "image" : "Garbage_neighboursWifeUnderware",
+        "price" : 20,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "实验室的烧杯",
+        "image" : "Garbage_laboratoryBeaker",
+        "price" : 10,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "含有不明液体的烧杯",
+        "image" : "Garbage_beakerWithUnknownLiquid",
+        "price" : 15,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "空罐子",
+        "image" : "Garbage_emptyJar",
+        "price" : 10,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "含有鱼骨的罐子",
+        "image" : "Garbage_jarWithFishSkeleton",
+        "price" : 10,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "实验室的针管",
+        "image" : "Garbage_laboratorySyringe",
+        "price" : 5,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "鱼骨头",
+        "image" : "Garbage_fishSkeleton",
+        "price" : 2,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+    
+    {
+        "name" : "不明的骸骨",
+        "image" : "Garbage_unknownSkeleton",
+        "price" : 5,
+        "pond" : "邻居家的池塘",
+        "description" : ""
+    },
+]

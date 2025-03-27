@@ -26,6 +26,8 @@ struct topBarView: View {
             .foregroundColor(.black)
         }
         .padding(.leading)
+        .padding(.trailing)
+          CoinsView()
         Spacer()
         
         Button(action: {

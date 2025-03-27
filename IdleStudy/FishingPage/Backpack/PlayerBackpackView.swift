@@ -3,7 +3,6 @@ import SwiftUI
 /// 主背包视图，包含左侧垂直 Tab 选择，以及垃圾/宝藏/装备/鱼篓/鱼库 的具体界面
 struct PlayerBackpackView: View {
     @ObservedObject var manager = PlayerBackpackManager.shared
-    
     // 用于弹出详情的垃圾 & 宝藏
     @State private var selectedGarbage: BackpackGarbageItem?
     @State private var selectedTreasure: BackpackTreasureItem?
@@ -15,56 +14,58 @@ struct PlayerBackpackView: View {
     @Binding var showPlayerBackpack: Bool
     
     var body: some View {
-        HStack(spacing: 0) {
-            VStack {
-                Button(
-                    action: {
-                    showPlayerBackpack.toggle()
-                },
-                    label: {
-                    Text("关闭")
-                }
-                )
-                // 左侧可滚动 Tab 栏
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(PlayerBackpackManager.BackpackTab.allCases, id: \.self) { tab in
-                            Button(action: {
-                                manager.selectedTab = tab
-                            }) {
-                                Text(tab.rawValue)
-                                    .font(.headline)
-                                    .foregroundColor(manager.selectedTab == tab ? .blue : .primary)
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(
-                                        Color.gray.opacity(manager.selectedTab == tab ? 0.3 : 0.2)
-                                    )
+        ZStack {
+            HStack(spacing: 0) {
+                VStack {
+                    Button(
+                        action: {
+                            showPlayerBackpack.toggle()
+                        },
+                        label: {
+                            Text("关闭")
+                        }
+                    )
+                    // 左侧可滚动 Tab 栏
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(PlayerBackpackManager.BackpackTab.allCases, id: \.self) { tab in
+                                Button(action: {
+                                    manager.selectedTab = tab
+                                }) {
+                                    Text(tab.rawValue)
+                                        .font(.headline)
+                                        .foregroundColor(manager.selectedTab == tab ? .blue : .primary)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(
+                                            Color.gray.opacity(manager.selectedTab == tab ? 0.3 : 0.2)
+                                        )
+                                }
                             }
                         }
                     }
+                    .frame(maxWidth: 50)
                 }
-                .frame(maxWidth: 50)
+                .background(Color.white)
+                
+                // 右侧内容视图
+                contentView
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .background(Color.white)
-            
-            // 右侧内容视图
-            contentView
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .padding(.top, 40)
-        // 弹出详情：垃圾、宝藏、鱼篓、鱼库
-        .sheet(item: $selectedGarbage) { item in
-            GarbageDetailView(item: item)
-        }
-        .sheet(item: $selectedTreasure) { item in
-            TreasureDetailView(item: item)
-        }
-        .sheet(item: $selectedFishBusket) { fish in
-            FishBusketDetailView(fish: fish, manager: manager)
-        }
-        .sheet(item: $selectedFishLibrary) { fish in
-            FishLibraryDetailView(fish: fish)
+            .padding(.top, 40)
+            // 弹出详情：垃圾、宝藏、鱼篓、鱼库
+            .sheet(item: $selectedGarbage) { item in
+                GarbageDetailView(item: item)
+            }
+            .sheet(item: $selectedTreasure) { item in
+                TreasureDetailView(item: item)
+            }
+            .sheet(item: $selectedFishBusket) { fish in
+                FishBusketDetailView(fish: fish, manager: manager)
+            }
+            .sheet(item: $selectedFishLibrary) { fish in
+                FishLibraryDetailView(fish: fish)
+            }
         }
     }
     
@@ -490,28 +491,6 @@ struct TreasureDetailView: View {
 struct PlayerBackpackView_Previews: PreviewProvider {
     static var previews: some View {
         let manager = PlayerBackpackManager.shared
-        
-//        // 示例：垃圾
-//        manager.garbageItems = [
-//            BackpackGarbageItem(name: "破鞋子", price: 5, pond: "邻居家的池塘", description: "真破", quantity: 2, totalCount: 5, fishedCount: 5),
-//            BackpackGarbageItem(name: "易拉罐", price: 2, pond: "山涧溪流", description: "残渣", quantity: 1, totalCount: 10, fishedCount: 10)
-//        ]
-//        
-//        // 示例：宝藏
-//        manager.treasureItems = [
-//            BackpackTreasureItem(name: "红宝石", price: 1000, pond: "湖泊水域", rarity: "史诗", description: "闪闪发光", quantity: 2, totalCount: 3, fishedCount: 3)
-//        ]
-//        
-//        // 示例：鱼篓
-//        manager.fishBusketItems = [
-//            FishInFishBusket(image: "fish", name: "小金鱼", quality: "不错", weight: 1.23, price: 50, rarity: "普通", exp: 10),
-//            FishInFishBusket(image: "fish", name: "大鲤鱼", quality: "完美", weight: 2.78, price: 120, rarity: "传说", exp: 20)
-//        ]
-//        
-//        // 示例：鱼库
-//        manager.fishLibraryItems = [
-//            FishInFishBusket(image: "fish", name: "传奇锦鲤", quality: "绝佳", weight: 5.55, price: 999, rarity: "至臻", exp: 100)
-//        ]
         
         manager.selectedTab = .fishbusket
         return PlayerBackpackView(manager: manager, showPlayerBackpack: .constant(true))
