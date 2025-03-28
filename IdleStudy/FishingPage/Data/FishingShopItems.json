@@ -1,0 +1,19 @@
+[
+    {
+        "tab" : "背包",
+        "name" : "宝藏堆叠+1",
+        "image" : "Garbage_unknownSkeleton",
+        "price" : 10000,
+        "description" : "增加宝藏的堆叠数量"
+    },
+    
+    
+    
+    {
+        "tab": "钓竿",
+        "name" : "铁渔竿",
+        "image" : "",
+        "price" : 5000,
+        "description" : "减少每次钓鱼的时间"
+    },
+]

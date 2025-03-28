@@ -83,3 +83,20 @@ struct TreasureInfoItem {
     let pond: String
     let description: String
 }
+
+//// MARK: - StoreItem
+//struct StoreItem: Identifiable, Codable, Hashable {
+//    var id = UUID()
+//    var name: String
+//    var image: String
+//    var price: Int
+//    let description: String
+//}
+//
+//struct StoreItemRaw: Codable {
+//    let tab: String
+//    let name: String
+//    let image: String
+//    let price: Int
+//    let description: String
+//}
